@@ -1,6 +1,6 @@
 # DanielCore.md
 
-Current Version: 1.29
+Current Version: 1.30
 Last Updated: 2026-06-01
 Purpose: Permanent source of truth for Daniel's workflow, review logic, course-development rules, and assistant behavior.
 
@@ -1982,6 +1982,103 @@ Do not merely repeat information. Validate information against reality, against 
 
 A system that can calculate must not blindly trust a label.
 
+## 25. Structural and Formatting Consistency Engine
+
+Applies to:
+- spreadsheets
+- course maps
+- outlines
+- business specs
+- tables
+- catalogs
+- reports
+- structured documents
+
+### Principle
+
+Formatting is not decoration.
+
+Formatting often communicates structure, hierarchy, ownership, status, and intent.
+
+### Visual Consistency Check
+
+Before finalizing, compare:
+- headers
+- subheaders
+- bolding
+- italics
+- colors
+- column widths
+- merged cells
+- alignment
+- indentation
+- numbering
+- bullets
+- section spacing
+- tab structure
+- worksheet structure
+
+Ask:
+"What formatting pattern exists?"
+
+Then ask:
+"Did I accidentally break it?"
+
+Examples:
+
+Header A: Bold
+Header B: Not bold
+Question: Should Header B match Header A?
+
+All topic rows: Blue fill
+One topic row: No fill
+Question: Was formatting accidentally removed?
+
+All Learning Objectives: One per row
+New section: Three LOs in one cell
+Question: Did structure drift?
+
+### Structure Overrides Edits
+
+When making changes, preserve:
+- existing layout
+- existing hierarchy
+- existing formatting patterns
+- existing workbook structure
+- existing sheet order
+- existing column order
+
+Do not reformat unless instructed.
+Do not "improve" formatting unless instructed.
+
+### Format Drift Detection
+
+Flag:
+- inconsistent headers
+- inconsistent colors
+- inconsistent bolding
+- inconsistent numbering
+- inconsistent tab naming
+- inconsistent row structures
+- inconsistent LO formatting
+
+### Self-Check
+
+Before completion ask:
+"If a human opened the original and the revised file side-by-side, would any visual difference exist that I cannot explain?"
+
+If yes: review before finalizing.
+
+### Final Principle
+
+When editing structured content:
+
+Preserve structure first.
+Preserve formatting second.
+Modify content third.
+
+An AI should never accidentally destroy formatting while attempting to improve content.
+
 2026-05-20: Initial DanielCore.md created from Daniel workflow training conversation.
 
 Key systems included:
@@ -2237,3 +2334,10 @@ Added:
 - Intelligence Validation Engine (§24) — 9-step validation protocol: classify, reality first, self-contradiction check, consistency check, computed values override labels, repair before reporting, escalation rule, outcome validation, intelligence question; plus consistency and reality engine with automatic conflict resolution and final validation principle
 
 Purpose: prevent the system from blindly executing, repeating, or trusting unverified information; enforce continuous self-validation across all work; computed values override labels; self-repair before escalation; consistency before reporting.
+
+2026-06-01: Updated to version 1.30.
+
+Added:
+- Structural and Formatting Consistency Engine (§25) — formatting is not decoration; visual consistency check; structure overrides edits; format drift detection; self-check before completion; preserve structure first, formatting second, content third
+
+Purpose: prevent accidental destruction of formatting and structure when editing spreadsheets, course maps, outlines, tables, catalogs, reports, and structured documents; enforce visual consistency and format preservation.
