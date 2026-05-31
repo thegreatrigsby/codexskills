@@ -982,7 +982,7 @@ Before any agent claims DanielCore is loaded from GitHub, it must verify the loa
 
 Required checks:
 1. Fetch remote DanielCore.md with cache-busting:
-   `https://raw.githubusercontent.com/thegreatrigsby/codexskills/main/DanielCore.md?t=<timestamp>`
+   `https://raw.githubusercontent.com/thegreatrigsby/codexskills/main/memory/DanielCore.md?t=<timestamp>`
 2. Compare:
    - Current Version header
    - Last Updated line
@@ -1006,7 +1006,7 @@ Sync Worker Cache Invalidation Rule:
 Before every sync check or any isolated cron session that reports DanielCore version state:
 
 1. Fetch DanielCore live with cache-busting:
-   `https://raw.githubusercontent.com/thegreatrigsby/codexskills/main/DanielCore.md?t=<timestamp>`
+   `https://raw.githubusercontent.com/thegreatrigsby/codexskills/main/memory/DanielCore.md?t=<timestamp>`
 2. Verify:
    - Version header
    - health-state version
