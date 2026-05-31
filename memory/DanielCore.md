@@ -1,6 +1,6 @@
 # DanielCore.md
 
-Current Version: 1.27
+Current Version: 1.28
 Last Updated: 2026-05-31
 Purpose: Permanent source of truth for Daniel's workflow, review logic, course-development rules, and assistant behavior.
 
@@ -1650,6 +1650,133 @@ Before reporting any issue as a blocker, verify:
 
 Require: attempt → verify → classify. Do not report assumptions as blockers.
 
+## 23. Reality-First Self-Healing Rule
+
+Purpose: Prevent the system from trusting configuration state over actual capability. Reported issues must be verified before escalation.
+
+### 23.1 Reality Overrides Configuration
+
+Before reporting ANY blocker:
+
+1. Verify reality first.
+2. Test the actual capability.
+3. Only then classify the issue.
+
+Required order:
+```
+detect → classify → verify reality → repair if safe → verify repair → log → NO_REPLY
+```
+
+Never:
+```
+detect → assume → notify Daniel
+```
+
+### 23.2 Capability Tests Override Assumptions
+
+Configuration state is evidence. Actual capability is truth.
+
+Examples of tests that must be performed before reporting:
+
+**GitHub**
+- actual read test (HTTP 200 on file fetch)
+- actual write test (create and delete test file)
+- repository access test (list contents)
+
+**Memory**
+- actual file read (cat/head the file)
+- actual file write (touch or edit test)
+- JSON validation (parse and validate)
+
+**Sync**
+- actual live fetch with cache-busting
+- actual version comparison (local vs remote)
+
+**Cache**
+- actual cache invalidation
+- actual reload verification
+
+**Credentials**
+- actual API call with token
+- actual authenticated operation
+- verify response code, not just token presence
+
+### 23.3 Credential Source Authority
+
+Primary source for GitHub operations:
+- `~/.openclaw/.github_token`
+
+Secondary:
+- Gateway credential source
+
+Deprecated:
+- `~/.openclaw/.github_env` (stale, may contain expired tokens)
+
+Before reporting credential failure:
+
+1. Verify primary source exists and is readable
+2. Perform read test with token
+3. Perform write test with token
+4. Verify repository access
+
+If tests pass:
+- repair stale references (update .github_env from .github_token if needed)
+- update health state
+- remain silent
+- do not notify Daniel
+
+### 23.4 Configuration vs Reality
+
+Missing configuration entry ≠ blocker if capability tests pass.
+
+Examples:
+- Missing env var ≠ blocker (if primary source works)
+- Missing secondary credential source ≠ blocker
+- Stale config entry ≠ blocker (if actual operation succeeds)
+- Deprecated file present ≠ blocker (if primary source valid)
+
+If primary source works and capability tests pass: system is healthy. Repair the stale reference silently.
+
+### 23.5 Self-Healing Expectation
+
+For memory-owned systems, if the issue is reversible, observable, and bounded, the system must attempt repair automatically.
+
+Examples requiring automatic repair:
+- stale cache
+- stale health-state
+- stale merged-log
+- wrong source URL
+- stale credential reference
+- stale bootloader metadata
+- stale subscriber cache
+- cron payload drift
+- incorrect file path
+- outdated config reference
+
+Required order:
+```
+diagnose → repair → verify → NO_REPLY
+```
+
+Only notify Daniel when:
+- repair failed
+- approval required
+- capability test failed
+- unresolved blocker remains
+- repeated failures exceed threshold (3+)
+
+### 23.6 Final Rule
+
+The system should not ask:
+"Is the configuration correct?"
+
+The system should ask:
+"Can I actually perform the task?"
+
+If the task succeeds: the issue is repaired.
+If the task fails: diagnose and repair.
+Only after repair fails should Daniel be notified.
+
 2026-05-20: Initial DanielCore.md created from Daniel workflow training conversation.
 
 Key systems included:
@@ -1891,3 +2018,10 @@ Added:
 - Failure Classification System (§22) — complete classification hierarchy: OBSERVATION, TRANSIENT_EXTERNAL, REPAIRABLE, BLOCKER, APPROVAL_REQUIRED; repairability check protocol; rate limit handling; observation vs blocker discipline; self-heal first protocol; false blocker guard
 
 Purpose: stop treating observations and transient failures as blockers requiring Daniel's attention; healthy systems are silent.
+
+2026-05-31: Updated to version 1.28.
+
+Added:
+- Reality-First Self-Healing Rule (§23) — reality overrides configuration; capability tests override assumptions; credential source authority; configuration vs reality discipline; self-healing expectation; final rule: ask "Can I actually perform the task?" not "Is the configuration correct?"
+
+Purpose: prevent the system from trusting configuration state over actual capability; verify reality before reporting blockers; repair stale references silently when tests pass.
